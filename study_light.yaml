@@ -1,0 +1,37 @@
+switch:
+  - platform: template
+    switches:
+      study_light:
+        value_template: "{{ states('input_boolean.study_light_state') }}"
+        turn_on:
+          service: script.study_light_on
+        turn_off:
+          service: script.study_light_off
+            
+input_boolean:
+  study_light_state:
+    name: Study Room Light State
+
+script:
+    study_light_on:
+      alias: Study room Light On
+      sequence:
+        - service: input_boolean.turn_on
+          entity_id: input_boolean.study_light_state
+        - service: remote.send_command
+          data:
+            device: light
+            command: 'on'
+          target:
+            entity_id: remote.shu_fang_yao_kong_remote
+    study_light_off:
+      alias: Study room Light Off
+      sequence:
+        - service: input_boolean.turn_off
+          entity_id: input_boolean.study_light_state
+        - service: remote.send_command
+          data:
+            device: light
+            command: 'on'
+          target:
+            entity_id: remote.shu_fang_yao_kong_remote
